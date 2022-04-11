@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recipe
+{% endblock %}
+
+{% block body %}
+	<h1>Recipe</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ recipe.id }}</td>
+			</tr>
+			<tr>
+				<th>Ingredient</th>
+				<td>{{ recipe.ingredient }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ recipe.description }}</td>
+			</tr>
+			<tr>
+				<th>Step</th>
+				<td>{{ recipe.step }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_recipe_index') }}">back to list</a>
+
+	{% if app.user != null and  app.user == recipe.creator %}
+		<a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}">edit</a>
+		{{ include('recipe/_delete_form.html.twig') }}
+	{% endif %}
+
+	{% for comment in recipe.comments %}
+		<p>{{comment.content}}</p>
+		<p>{{comment.creator.username}}</p>
+	{% endfor %}
+
+    {{ include('comment/_form.html.twig') }}
+
+
+{% endblock %}

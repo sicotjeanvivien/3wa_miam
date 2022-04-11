@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recipe index
+{% endblock %}
+
+{% block body %}
+	<h1>Recipe index</h1>
+
+    <a href="{{ path('app_logout') }}">Disconnect</a>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Ingredient</th>
+				<th>Description</th>
+				<th>Step</th>
+				<th>Creator</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for recipe in recipes %}
+				<tr>
+					<td>{{ recipe.id }}</td>
+					<td>{{ recipe.ingredient }}</td>
+					<td>{{ recipe.description }}</td>
+					<td>{{ recipe.step }}</td>
+					<td>
+						{% if recipe.creator != null  %}
+							{{ recipe.creator.username }}
+						{% endif %}
+					</td>
+					<td>
+						<a href="{{ path('app_recipe_show', {'id': recipe.id}) }}">show</a>
+						{% if app.user != null and  app.user == recipe.creator %}
+							<a href="{{ path('app_recipe_edit', {'id': recipe.id}) }}">edit</a>
+						{% endif %}
+
+
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="5">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% if is_granted("ROLE_USER") or  is_granted("ROLE_ADMIN")%}
+		<a href="{{ path('app_recipe_new') }}">Create new</a>
+	{% endif %}
+
+{% endblock %}
